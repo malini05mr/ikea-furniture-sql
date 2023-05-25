@@ -1,0 +1,29 @@
+use ikea;
+select * from furniture;
+/* average price of furniture */
+select category,avg(price) as average_price from furniture
+group by category
+order by average_price desc;
+/* online availability percentage */
+select category,avg(case when online_availability='yes' then 1 else 0 end)*100 as online_availability_percentage
+from furniture
+group by category
+order by online_availability_percentage desc ;
+/* price drop */
+select name,furniture_description ,(old_price-price)/old_price *100 as price_drop_percentage from furniture
+order by price_drop_percentage desc
+limit 5;
+/* colour availability */
+select category, furniture_description,colours_available from furniture
+group by category,colours_available,furniture_description
+order by category,count(*) desc;
+/* Maximum price */
+select category,name,price from furniture
+where(category,price) in( select category,max(price) from furniture
+group by category
+order by price desc
+);
+/* description length */
+select category,avg(length(furniture_description))as avg_description_length
+from furniture
+group by category;
